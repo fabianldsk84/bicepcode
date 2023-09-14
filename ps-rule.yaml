@@ -1,0 +1,20 @@
+# YAML: Enable expansion for Bicep source files.
+configuration:
+  AZURE_BICEP_FILE_EXPANSION: true  # Enable automatic expansion of bicep source files. 
+  AZURE_BICEP_PARAMS_FILE_EXPANSION: true # Enable expansion for Bicep module from parameter files.
+
+input:
+  pathIgnore:
+    - azure-pipeline.yaml
+    - ps-rule.yaml
+    - modules/
+    - refs/
+
+# YAML: Using the rule/exclude property
+rule:
+  exclude:
+  - Azure.Template.UseDescriptions  # This rule suggets to Use descriptions for each resource in generated template(bicep, psarm, AzOps) to communicate purpose.
+
+output:
+  culture:
+  - 'en-US'

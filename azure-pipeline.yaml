@@ -1,0 +1,34 @@
+trigger:
+  none
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: ValidateIaC
+  jobs:
+    - job: ValidateIaC
+      displayName: Validating IaC with PSRules
+      steps:               
+        - task: ps-rule-install@2
+          displayName: "Install PSRule"
+          inputs:
+            module: PSRule.Rules.Azure
+            latest: true
+            prerelease: false
+        - task: ps-rule-assert@2
+          displayName: "Run PSRule Validation"
+          continueOnError: true
+          inputs:
+            inputPath: 
+            modules: 'PSRule.Rules.Azure'
+            option: 'ps-rule.yaml'
+            outputFormat: 'NUnit3'
+            outputPath: 'ps-rule-results.xml'
+        - task: PublishTestResults@2
+          displayName: "Publish PSRule results"
+          inputs:
+            testResultsFormat: 'NUnit'
+            testResultsFiles: 'ps-rule-results.xml'
+            failTaskOnFailedTests: false
+            testRunTitle: 'PSRule-File'
